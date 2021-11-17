@@ -132,6 +132,19 @@ public class Main {
 	    }
 	}
 	
+	private static boolean isDoublePositive(String number) {
+		try {
+	        final Double aux = Double.parseDouble(number);
+	        if (aux >= 0.0) {
+	        	return true;	        	
+	        } else {
+	        	return false;
+	        }
+	    } catch (NumberFormatException e) {
+	       	return false;
+	    }
+	}
+	
 	private static void addNewLoo() {
 		// CREATING THE FILE (IF NOT EXISTS)
 		try {
@@ -143,19 +156,54 @@ public class Main {
 		loopAdd : while (true) {
 			// ENTERING VALUES OF THE LOO TO ADD
 			System.out.println("Please enter the loo longitude:");
-			final String longitude = KEYBOARD.nextLine();
+			String longitude = KEYBOARD.nextLine();
+			while (!checkLongitude(longitude)) {
+				System.out.println("Invalid longitude");
+				System.out.println("Please enter the loo longitude:");
+				longitude = KEYBOARD.nextLine();
+			}
 			System.out.println("Please enter the loo latitude:");
-			final String latitude = KEYBOARD.nextLine();
+			String latitude = KEYBOARD.nextLine();
+			while (!checkLatitude(latitude)) {
+				System.out.println("Invalid latitude");
+				System.out.println("Please enter the loo latitude:");
+				latitude = KEYBOARD.nextLine();
+			}
 			System.out.println("How clean is it?");
-			final String cleanliness = KEYBOARD.nextLine();
-			System.out.println("Does it have a handicapped unit? (Y/N)");
-			final String handicapped = KEYBOARD.nextLine();
-			System.out.println("Does it have a baby unit? (Y/N)");
-			final String baby = KEYBOARD.nextLine();
+			String cleanliness = KEYBOARD.nextLine();
+			while (!cleanliness.equals("") || !cleanliness.matches("[1-5]")) {
+				System.out.println("Invalid cleanliness value! Please type an integer ranging from 0 to 5 or just press Enter");
+				System.out.println("How clean is it?");
+				cleanliness = KEYBOARD.nextLine();
+			}
+			System.out.println("Does it have a handicapped unit? (Y/n)");
+			String handicapped = KEYBOARD.nextLine();
+			while (!handicapped.equals("Y") || !handicapped.equals("n")) {
+				System.out.println("Invalid value! Please type ‘Y’ or ‘n’ and press Enter.");
+				System.out.println("Does it have a handicapped unit? (Y/n)");
+				handicapped = KEYBOARD.nextLine();
+			}
+			System.out.println("Does it have a baby unit? (Y/n)");
+			String baby = KEYBOARD.nextLine();
+			while (!baby.equals("Y") || !baby.equals("n")) {
+				System.out.println("Invalid value! Please type ‘Y’ or ‘n’ and press Enter.");
+				System.out.println("Does it have a baby unit? (Y/n)");
+				baby = KEYBOARD.nextLine();
+			}
 			System.out.println("Please enter the loo price:");
-			final String price = KEYBOARD.nextLine();
+			String price = KEYBOARD.nextLine();
+			while (isDoublePositive(price)) {
+				System.out.println("Invalid value! Please type a number >= 0 and press Enter");
+				System.out.println("Please enter the loo price:");
+				price = KEYBOARD.nextLine();
+			}
 			System.out.println("[Optional] What time are the loos open:");
-			final String open = KEYBOARD.nextLine();
+			String open = KEYBOARD.nextLine();
+			while (open.length() > 100) {
+				System.out.println("“Invalid input, please use less than 100 characters, this value is optional");
+				System.out.println("[Optional] What time are the loos open:");
+				open = KEYBOARD.nextLine();
+			}
 			
 			// WRITING IN THE FILE THE NEW LOO
 			final int id = createId();
@@ -165,15 +213,31 @@ public class Main {
 			// ASK TO ADD ANOTHER LOO
 			System.out.println("Do you want to add another loo (Y/N)?");
 			final String addAnother = KEYBOARD.nextLine();
-			if (!addAnother.equals("Y") && !addAnother.equals("y")) {
+			if (!addAnother.startsWith("Y") && !addAnother.startsWith("y")) {
 				break loopAdd;
 			}
 		}
 	}
 
 	private static void viewAllLoos() {
-		// TODO Auto-generated method stub
-		
+	    try {
+	    	String line;
+			final BufferedReader input = new BufferedReader(new FileReader(FILE));
+			while ((line = input.readLine()) != null) { 
+			    String[] lineInputs = line.split(";");
+			    System.out.println("<" + lineInputs[0] + ">" +
+			    		"<" + lineInputs[1] + ">" + 
+			    		"<" + lineInputs[2] + ">" +
+			    		"<" + lineInputs[3] + ">" +
+			    		"<" + lineInputs[4] + ">" +
+			    		"<" + lineInputs[5] + ">" +
+			    		"<" + lineInputs[6] + ">" +
+			    		"<" + lineInputs[7] + ">");
+			}
+			input.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static void findClosestLoo() {
