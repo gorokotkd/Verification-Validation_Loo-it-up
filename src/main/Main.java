@@ -103,6 +103,35 @@ public class Main {
 		}
 	}
 	
+	private static boolean checkLongitude(String longitude) {
+		final Double number = Double.parseDouble(longitude);
+		final int integerPlaces = longitude.indexOf('.');
+		final int decimalPlaces = longitude.length() - integerPlaces - 1;
+		if (decimalPlaces == 6 && number >= -180.0 && number <= 180.0 && isDouble(longitude)) {
+			return true;
+		}
+		return false;
+	}
+	
+	private static boolean checkLatitude(String latitude) {
+		final Double number = Double.parseDouble(latitude);
+		final int integerPlaces = latitude.indexOf('.');
+		final int decimalPlaces = latitude.length() - integerPlaces - 1;
+		if (decimalPlaces == 6 && number >= -90.0 && number <= 90.0 && isDouble(latitude)) {
+			return true;
+		}
+		return false;
+	}
+	
+	private static boolean isDouble(String number) {
+		try {
+	        Double.parseDouble(number);
+	        return true;
+	    } catch (NumberFormatException e) {
+	       	return false;
+	    }
+	}
+	
 	private static void addNewLoo() {
 		// CREATING THE FILE (IF NOT EXISTS)
 		try {
