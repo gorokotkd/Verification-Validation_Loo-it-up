@@ -111,25 +111,46 @@ public class Main {
 	}
 	
 	private static boolean checkLongitude(String longitude) {
-		final Double number = Double.parseDouble(longitude);
-		final int integerPlaces = longitude.indexOf('.');
-		final int decimalPlaces = longitude.length() - integerPlaces - 1;
-		if (decimalPlaces == 6 && number >= -180.0 && number <= 180.0 && isDouble(longitude)) {
-			return true;
-		}
-		return false;
+		/*try {
+			final Double number = Double.parseDouble(longitude);
+			final int integerPlaces = longitude.indexOf('.');
+			final int decimalPlaces = longitude.length() - integerPlaces - 1;
+			if (decimalPlaces == 6 && number >= -180.0 && number <= 180.0 && isDouble(longitude)) {
+				return true;
+			}
+			return false;
+		}catch(NumberFormatException ex) {
+			return false;
+		}*/
+		
+		final String pattern = "^(-?)[0-9]{1,3}(\\.[0-9]{1,6})?$";
+		if(longitude.matches(pattern)) {
+			Integer longitude_num = Integer.parseInt(longitude.split("\\.")[0]);	
+			return (longitude_num <= 180 && longitude_num >=-180);
+			
+		}else
+			return false;
+		
 	}
 	
 	private static boolean checkLatitude(String latitude) {
-		final Double number = Double.parseDouble(latitude);
+		/*final Double number = Double.parseDouble(latitude);
 		final int integerPlaces = latitude.indexOf('.');
 		final int decimalPlaces = latitude.length() - integerPlaces - 1;
 		if (decimalPlaces == 6 && number >= -90.0 && number <= 90.0 && isDouble(latitude)) {
 			return true;
 		}
-		return false;
+		return false;*/
+		
+		final String pattern = "^(-?)[0-9]{1,2}(\\.[0-9]{1,6})?$";
+		if(latitude.matches(pattern)) {
+			Integer latitude_num = Integer.parseInt(latitude.split("\\.")[0]);	
+			return (latitude_num <= 90 && latitude_num >=-90);
+			
+		}else
+			return false;
 	}
-	
+	/*
 	private static boolean isDouble(String number) {
 		try {
 	        Double.parseDouble(number);
@@ -137,16 +158,17 @@ public class Main {
 	    } catch (NumberFormatException e) {
 	       	return false;
 	    }
-	}
+	}*/
 	
 	private static boolean isDoublePositive(String number) {
 		try {
 	        final Double aux = Double.parseDouble(number);
-	        if (aux >= 0.0) {
+	        /*if (aux >= 0.0) {
 	        	return true;	        	
 	        } else {
 	        	return false;
-	        }
+	        }*/
+	        return aux >= 0.0;
 	    } catch (NumberFormatException e) {
 	       	return false;
 	    }
@@ -186,14 +208,14 @@ public class Main {
 			System.out.println("Does it have a handicapped unit? (Y/n)");
 			String handicapped = KEYBOARD.nextLine();
 			while (!handicapped.equals("Y") || !handicapped.equals("n")) {
-				System.out.println("Invalid value! Please type ‘Y’ or ‘n’ and press Enter.");
+				System.out.println("Invalid value! Please type ï¿½Yï¿½ or ï¿½nï¿½ and press Enter.");
 				System.out.println("Does it have a handicapped unit? (Y/n)");
 				handicapped = KEYBOARD.nextLine();
 			}
 			System.out.println("Does it have a baby unit? (Y/n)");
 			String baby = KEYBOARD.nextLine();
 			while (!baby.equals("Y") || !baby.equals("n")) {
-				System.out.println("Invalid value! Please type ‘Y’ or ‘n’ and press Enter.");
+				System.out.println("Invalid value! Please type ï¿½Yï¿½ or ï¿½nï¿½ and press Enter.");
 				System.out.println("Does it have a baby unit? (Y/n)");
 				baby = KEYBOARD.nextLine();
 			}
@@ -207,7 +229,7 @@ public class Main {
 			System.out.println("[Optional] What time are the loos open:");
 			String open = KEYBOARD.nextLine();
 			while (open.length() > 100) {
-				System.out.println("“Invalid input, please use less than 100 characters, this value is optional");
+				System.out.println("ï¿½Invalid input, please use less than 100 characters, this value is optional");
 				System.out.println("[Optional] What time are the loos open:");
 				open = KEYBOARD.nextLine();
 			}
@@ -280,7 +302,7 @@ public class Main {
 			    }
 			}			
 			System.out.println("To The Loo. Find the closest loo at (<" + closest[1] + ">, <" + closest[2] + ">). "
-					+ "It’s <" + closest[3] + "> (according to its rate: 0 -> disgusting, 5 -> perfectly clean). "
+					+ "Itï¿½s <" + closest[3] + "> (according to its rate: 0 -> disgusting, 5 -> perfectly clean). "
 					+ "Hanidcapped unit: <" + closest[4] + ">. Baby unit: <" + closest[5] + ">. Opening hours are <" + closest[7] + ">");
 			input.close();
 		} catch (IOException e) {
