@@ -65,6 +65,13 @@ public class Main {
 				   System.out.println("Invalid option. Please enter your choice again!");
 				   break;
 			} 
+			
+			// ASK FOR ENTER OTHER OPTION
+			System.out.println("Do you wish to continue (y/n)?");
+			final String again = KEYBOARD.nextLine();
+			if (!again.startsWith("y") || !again.startsWith("Y")) {
+				break loop;
+			}
 		} 
 		
 		// CLOSING THE INPUT
@@ -220,6 +227,7 @@ public class Main {
 	}
 
 	private static void viewAllLoos() {
+		// READ ALL LOOS
 	    try {
 	    	String line;
 			final BufferedReader input = new BufferedReader(new FileReader(FILE));
@@ -241,22 +249,129 @@ public class Main {
 	}
 	
 	private static void findClosestLoo() {
-		// TODO Auto-generated method stub
+		// ENTER THE VALUES
+		System.out.println("Please enter your location (Longitude, Latitude):");
+		String longitude_latitude = KEYBOARD.nextLine();
+		int length = longitude_latitude.length() - 1;
+		longitude_latitude = longitude_latitude.substring(1, length);
+		final String[] split = longitude_latitude.split(",");
+		while (!checkLongitude(split[0]) && !checkLatitude(split[1])) {
+			System.out.println("Please enter your coordinates again using coordinate standards, e.g: (53.370221, -6.216369)");
+			System.out.println("Please enter your location (Longitude, Latitude):");
+			longitude_latitude = KEYBOARD.nextLine();
+		}
 		
+		// SEARCH THE CLOSEST
+	    try {
+	    	String line;
+	    	String[] closest = new String[8];
+	    	double distanceClosest = Double.MAX_VALUE;
+			final BufferedReader input = new BufferedReader(new FileReader(FILE));
+			while ((line = input.readLine()) != null) { 
+			    String[] lineInputs = line.split(";");
+			    final double latitude = Double.parseDouble(split[1]);
+			    final double longitude = Double.parseDouble(split[0]);
+			    final double latitudeRead = Double.parseDouble(lineInputs[2]);
+			    final double longitudeRead = Double.parseDouble(lineInputs[1]);
+			    final double distance = Math.hypot(latitude-latitudeRead, longitude-longitudeRead);
+			    if (distance < distanceClosest) {
+			    	distanceClosest = distance;
+			    	closest = lineInputs;
+			    }
+			}			
+			System.out.println("To The Loo. Find the closest loo at (<" + closest[1] + ">, <" + closest[2] + ">). "
+					+ "It’s <" + closest[3] + "> (according to its rate: 0 -> disgusting, 5 -> perfectly clean). "
+					+ "Hanidcapped unit: <" + closest[4] + ">. Baby unit: <" + closest[5] + ">. Opening hours are <" + closest[7] + ">");
+			input.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private static void updateStateCleanliness() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Please enter the ID of the loo you would like to provide cleanliness updates:");
+		String id = KEYBOARD.nextLine();
+		String[] loo;
+		loopCleanliness : while (true) {
+		    try {
+		    	String line;
+				final BufferedReader input = new BufferedReader(new FileReader(FILE));
+				while ((line = input.readLine()) != null) { 
+				    String[] lineInputs = line.split(";");
+				    if (id.equals(lineInputs[0])) {
+				    	loo = lineInputs;
+				    	break loopCleanliness;
+				    }
+				}
+				input.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Invalid ID! Do you wish to try again ? (y/n)");
+			final String again = KEYBOARD.nextLine();
+			if (!again.startsWith("y") || !again.startsWith("Y")) {
+				break loopCleanliness;
+			}
+			System.out.println("Please enter the ID of the loo you would like to provide cleanliness updates:");
+			id = KEYBOARD.nextLine();
+		}
 	}
 	
 	private static void updateOpeningHours() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("please enter the ID of the loo you would like to provide opening hours updates.");
+		String id = KEYBOARD.nextLine();
+		String[] loo;
+		loopOpening : while (true) {
+		    try {
+		    	String line;
+				final BufferedReader input = new BufferedReader(new FileReader(FILE));
+				while ((line = input.readLine()) != null) { 
+				    String[] lineInputs = line.split(";");
+				    if (id.equals(lineInputs[0])) {
+				    	loo = lineInputs;
+				    	break loopOpening;
+				    }
+				}
+				input.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Invalid ID! Do you wish to try again ? (y/n)");
+			final String again = KEYBOARD.nextLine();
+			if (!again.startsWith("y") || !again.startsWith("Y")) {
+				break loopOpening;
+			}
+			System.out.println("please enter the ID of the loo you would like to provide opening hours updates.");
+			id = KEYBOARD.nextLine();
+		}
 	}
 	
 	private static void deleteLoo() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("please enter the ID of the loo you would like to delete");
+		String id = KEYBOARD.nextLine();
+		String[] loo;
+		loopDelete : while (true) {
+		    try {
+		    	String line;
+				final BufferedReader input = new BufferedReader(new FileReader(FILE));
+				while ((line = input.readLine()) != null) { 
+				    String[] lineInputs = line.split(";");
+				    if (id.equals(lineInputs[0])) {
+				    	loo = lineInputs;
+				    	break loopDelete;
+				    }
+				}
+				input.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println("Invalid ID! Do you wish to try again ? (y/n)");
+			final String again = KEYBOARD.nextLine();
+			if (!again.startsWith("y") || !again.startsWith("Y")) {
+				break loopDelete;
+			}
+			System.out.println("please enter the ID of the loo you would like to delete");
+			id = KEYBOARD.nextLine();
+		}
 	}
 }
