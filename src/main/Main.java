@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class Main {
 	
-	private static final File FILE = new File(System.getProperty("user.dir") + "\\src\\main\\loo.txt");
+	private static final File FILE = new File(System.getProperty("user.dir") + "/src/main/loo.txt");
 	private static final Scanner KEYBOARD = new Scanner(System.in);
 	
 	public static void main(String[] args) {
@@ -69,7 +69,7 @@ public class Main {
 			// ASK FOR ENTER OTHER OPTION
 			System.out.println("Do you wish to continue (y/n)?");
 			final String again = KEYBOARD.nextLine();
-			if (!again.startsWith("y") || !again.startsWith("Y")) {
+			if (!again.startsWith("y") && !again.startsWith("Y")) {
 				break loop;
 			}
 		} 
@@ -92,7 +92,7 @@ public class Main {
 			e.printStackTrace();
 		}
 	    if (last.equals("")) {
-	    	id = 0000000001;
+	    	id = 1;
 	    } else {
 	    	id = Integer.parseInt(last.split(";")[0]) + 1;
 	    }
@@ -111,19 +111,7 @@ public class Main {
 	}
 	
 	private static boolean checkLongitude(String longitude) {
-		/*try {
-			final Double number = Double.parseDouble(longitude);
-			final int integerPlaces = longitude.indexOf('.');
-			final int decimalPlaces = longitude.length() - integerPlaces - 1;
-			if (decimalPlaces == 6 && number >= -180.0 && number <= 180.0 && isDouble(longitude)) {
-				return true;
-			}
-			return false;
-		}catch(NumberFormatException ex) {
-			return false;
-		}*/
-		
-		final String pattern = "^(-?)[0-9]{1,3}(\\.[0-9]{1,6})?$";
+		final String pattern = "^(-?)[0-9]{1,3}\\.[0-9]{6}$";
 		if(longitude.matches(pattern)) {
 			Integer longitude_num = Integer.parseInt(longitude.split("\\.")[0]);	
 			return (longitude_num <= 180 && longitude_num >=-180);
@@ -134,40 +122,19 @@ public class Main {
 	}
 	
 	private static boolean checkLatitude(String latitude) {
-		/*final Double number = Double.parseDouble(latitude);
-		final int integerPlaces = latitude.indexOf('.');
-		final int decimalPlaces = latitude.length() - integerPlaces - 1;
-		if (decimalPlaces == 6 && number >= -90.0 && number <= 90.0 && isDouble(latitude)) {
-			return true;
-		}
-		return false;*/
-		
-		final String pattern = "^(-?)[0-9]{1,2}(\\.[0-9]{1,6})?$";
+		final String pattern = "^(-?)[0-9]{1,2}\\.[0-9]{6}$";
 		if(latitude.matches(pattern)) {
 			Integer latitude_num = Integer.parseInt(latitude.split("\\.")[0]);	
 			return (latitude_num <= 90 && latitude_num >=-90);
 			
 		}else
 			return false;
+		
 	}
-	/*
-	private static boolean isDouble(String number) {
-		try {
-	        Double.parseDouble(number);
-	        return true;
-	    } catch (NumberFormatException e) {
-	       	return false;
-	    }
-	}*/
 	
 	private static boolean isDoublePositive(String number) {
 		try {
 	        final Double aux = Double.parseDouble(number);
-	        /*if (aux >= 0.0) {
-	        	return true;	        	
-	        } else {
-	        	return false;
-	        }*/
 	        return aux >= 0.0;
 	    } catch (NumberFormatException e) {
 	       	return false;
@@ -200,28 +167,28 @@ public class Main {
 			}
 			System.out.println("How clean is it?");
 			String cleanliness = KEYBOARD.nextLine();
-			while (!cleanliness.equals("") || !cleanliness.matches("[1-5]")) {
+			while (!cleanliness.equals("") && !cleanliness.matches("[0-5]")) {
 				System.out.println("Invalid cleanliness value! Please type an integer ranging from 0 to 5 or just press Enter");
 				System.out.println("How clean is it?");
 				cleanliness = KEYBOARD.nextLine();
 			}
 			System.out.println("Does it have a handicapped unit? (Y/n)");
 			String handicapped = KEYBOARD.nextLine();
-			while (!handicapped.equals("Y") || !handicapped.equals("n")) {
-				System.out.println("Invalid value! Please type �Y� or �n� and press Enter.");
+			while (!handicapped.equals("Y") && !handicapped.equals("n")) {
+				System.out.println("Invalid value! Please type 'Y' or 'n' and press Enter.");
 				System.out.println("Does it have a handicapped unit? (Y/n)");
 				handicapped = KEYBOARD.nextLine();
 			}
 			System.out.println("Does it have a baby unit? (Y/n)");
 			String baby = KEYBOARD.nextLine();
-			while (!baby.equals("Y") || !baby.equals("n")) {
-				System.out.println("Invalid value! Please type �Y� or �n� and press Enter.");
+			while (!baby.equals("Y") && !baby.equals("n")) {
+				System.out.println("Invalid value! Please type 'Y' or 'n' and press Enter.");
 				System.out.println("Does it have a baby unit? (Y/n)");
 				baby = KEYBOARD.nextLine();
 			}
 			System.out.println("Please enter the loo price:");
 			String price = KEYBOARD.nextLine();
-			while (isDoublePositive(price)) {
+			while (!isDoublePositive(price)) {
 				System.out.println("Invalid value! Please type a number >= 0 and press Enter");
 				System.out.println("Please enter the loo price:");
 				price = KEYBOARD.nextLine();
@@ -229,10 +196,13 @@ public class Main {
 			System.out.println("[Optional] What time are the loos open:");
 			String open = KEYBOARD.nextLine();
 			while (open.length() > 100) {
-				System.out.println("�Invalid input, please use less than 100 characters, this value is optional");
+				System.err.println("Invalid input, please use less than 100 characters, this value is optional");
 				System.out.println("[Optional] What time are the loos open:");
 				open = KEYBOARD.nextLine();
 			}
+			
+			//Just to add a blank character if no input is provided
+			open = open.length() == 0 ? " " : open;
 			
 			// WRITING IN THE FILE THE NEW LOO
 			final int id = createId();
@@ -242,7 +212,7 @@ public class Main {
 			// ASK TO ADD ANOTHER LOO
 			System.out.println("Do you want to add another loo (Y/N)?");
 			final String addAnother = KEYBOARD.nextLine();
-			if (!addAnother.startsWith("Y") && !addAnother.startsWith("y")) {
+			if (!(addAnother.startsWith("Y") || addAnother.startsWith("y"))) {
 				break loopAdd;
 			}
 		}
@@ -274,14 +244,24 @@ public class Main {
 		// ENTER THE VALUES
 		System.out.println("Please enter your location (Longitude, Latitude):");
 		String longitude_latitude = KEYBOARD.nextLine();
-		int length = longitude_latitude.length() - 1;
-		longitude_latitude = longitude_latitude.substring(1, length);
-		final String[] split = longitude_latitude.split(",");
-		while (!checkLongitude(split[0]) && !checkLatitude(split[1])) {
+		
+		final String regex = "^\\((-?)[0-9]{1,3}\\.[0-9]{6}, (-?)[0-9]{1,2}\\.[0-9]{6}\\)$";
+		//int length = longitude_latitude.length() - 1;
+		
+		//Removing the brackets
+		String longitude_latitude_brackets = longitude_latitude.substring(1, longitude_latitude.length()-1);
+		String[] split = longitude_latitude_brackets.split(", ");
+		
+		
+		while (!(longitude_latitude.matches(regex) && checkLongitude(split[0]) && checkLatitude(split[1]))) {
 			System.out.println("Please enter your coordinates again using coordinate standards, e.g: (53.370221, -6.216369)");
 			System.out.println("Please enter your location (Longitude, Latitude):");
 			longitude_latitude = KEYBOARD.nextLine();
+			longitude_latitude_brackets = longitude_latitude.substring(1, longitude_latitude.length()-1);
+			split = longitude_latitude_brackets.split(", ");
 		}
+		
+		
 		
 		// SEARCH THE CLOSEST
 	    try {
@@ -302,7 +282,7 @@ public class Main {
 			    }
 			}			
 			System.out.println("To The Loo. Find the closest loo at (<" + closest[1] + ">, <" + closest[2] + ">). "
-					+ "It�s <" + closest[3] + "> (according to its rate: 0 -> disgusting, 5 -> perfectly clean). "
+					+ "It's <" + closest[3] + "> (according to its rate: 0 -> disgusting, 5 -> perfectly clean). "
 					+ "Hanidcapped unit: <" + closest[4] + ">. Baby unit: <" + closest[5] + ">. Opening hours are <" + closest[7] + ">");
 			input.close();
 		} catch (IOException e) {
@@ -331,7 +311,7 @@ public class Main {
 			}
 			System.out.println("Invalid ID! Do you wish to try again ? (y/n)");
 			final String again = KEYBOARD.nextLine();
-			if (!again.startsWith("y") || !again.startsWith("Y")) {
+			if (!again.startsWith("y") && !again.startsWith("Y")) {
 				break loopCleanliness;
 			}
 			System.out.println("Please enter the ID of the loo you would like to provide cleanliness updates:");
@@ -340,7 +320,7 @@ public class Main {
 	}
 	
 	private static void updateOpeningHours() {
-		System.out.println("please enter the ID of the loo you would like to provide opening hours updates.");
+		System.out.println("Please enter the ID of the loo you would like to provide opening hours updates.");
 		String id = KEYBOARD.nextLine();
 		String[] loo;
 		loopOpening : while (true) {
@@ -360,7 +340,7 @@ public class Main {
 			}
 			System.out.println("Invalid ID! Do you wish to try again ? (y/n)");
 			final String again = KEYBOARD.nextLine();
-			if (!again.startsWith("y") || !again.startsWith("Y")) {
+			if (!again.startsWith("y") && !again.startsWith("Y")) {
 				break loopOpening;
 			}
 			System.out.println("please enter the ID of the loo you would like to provide opening hours updates.");
@@ -389,7 +369,7 @@ public class Main {
 			}
 			System.out.println("Invalid ID! Do you wish to try again ? (y/n)");
 			final String again = KEYBOARD.nextLine();
-			if (!again.startsWith("y") || !again.startsWith("Y")) {
+			if (!again.startsWith("y") && !again.startsWith("Y")) {
 				break loopDelete;
 			}
 			System.out.println("please enter the ID of the loo you would like to delete");
