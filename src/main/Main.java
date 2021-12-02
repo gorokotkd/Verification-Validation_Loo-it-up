@@ -14,7 +14,7 @@ public class Main {
 	private static final File FILE = new File(System.getProperty("user.dir") + "/src/main/loo.txt");
 	private static final Scanner KEYBOARD = new Scanner(System.in);
 	
-	public static void main(String[] args) {
+	public void main() {
 		
 		// READING THE INPUT
 		loop : while (true) {
@@ -75,10 +75,10 @@ public class Main {
 		} 
 		
 		// CLOSING THE INPUT
-		KEYBOARD.close();
+		//KEYBOARD.close();
 	}
 	
-	private static int createId() {
+	private int createId() {
 	    String last = "";
 	    String line;
 	    final int id;
@@ -99,7 +99,7 @@ public class Main {
 		return id;
 	}
 	
-	private static void writeFile(String toWrite) {
+	private void writeFile(String toWrite) {
 		final Writer writer;
 		try {
 			writer = new BufferedWriter(new FileWriter(FILE, true));
@@ -110,7 +110,7 @@ public class Main {
 		}
 	}
 	
-	private static boolean checkLongitude(String longitude) {
+	private boolean checkLongitude(String longitude) {
 		final String pattern = "^(-?)[0-9]{1,3}\\.[0-9]{6}$";
 		if(longitude.matches(pattern)) {
 			Integer longitude_num = Integer.parseInt(longitude.split("\\.")[0]);	
@@ -121,7 +121,7 @@ public class Main {
 		
 	}
 	
-	private static boolean checkLatitude(String latitude) {
+	private boolean checkLatitude(String latitude) {
 		final String pattern = "^(-?)[0-9]{1,2}\\.[0-9]{6}$";
 		if(latitude.matches(pattern)) {
 			Integer latitude_num = Integer.parseInt(latitude.split("\\.")[0]);	
@@ -132,7 +132,7 @@ public class Main {
 		
 	}
 	
-	private static boolean isDoublePositive(String number) {
+	private boolean isDoublePositive(String number) {
 		try {
 	        final Double aux = Double.parseDouble(number);
 	        return aux >= 0.0;
@@ -141,7 +141,7 @@ public class Main {
 	    }
 	}
 	
-	private static void addNewLoo() {
+	private void addNewLoo() {
 		// CREATING THE FILE (IF NOT EXISTS)
 		try {
 			FILE.createNewFile();
@@ -218,7 +218,7 @@ public class Main {
 		}
 	}
 
-	private static void viewAllLoos() {
+	private void viewAllLoos() {
 		// READ ALL LOOS
 	    try {
 	    	String line;
@@ -240,7 +240,7 @@ public class Main {
 		}
 	}
 	
-	private static void findClosestLoo() {
+	private void findClosestLoo() {
 		// ENTER THE VALUES
 		System.out.println("Please enter your location (Longitude, Latitude):");
 		String longitude_latitude = KEYBOARD.nextLine();
@@ -290,7 +290,7 @@ public class Main {
 		}
 	}
 	
-	private static void updateStateCleanliness() {
+	private void updateStateCleanliness() {
 		System.out.println("Please enter the ID of the loo you would like to provide cleanliness updates:");
 		String id = KEYBOARD.nextLine();
 		String[] loo;
@@ -319,7 +319,7 @@ public class Main {
 		}
 	}
 	
-	private static void updateOpeningHours() {
+	private void updateOpeningHours() {
 		System.out.println("Please enter the ID of the loo you would like to provide opening hours updates.");
 		String id = KEYBOARD.nextLine();
 		String[] loo;
@@ -348,7 +348,7 @@ public class Main {
 		}
 	}
 	
-	private static void deleteLoo() {
+	private void deleteLoo() {
 		System.out.println("please enter the ID of the loo you would like to delete");
 		String id = KEYBOARD.nextLine();
 		String[] loo;
